@@ -1,0 +1,130 @@
+const words = [
+    "IT Engineering Student",
+    "Cyber Security",
+    "Arduino Developer",
+    "AI Enthusiast",
+    "Problem Solver"
+];
+
+let wordIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+const typing = document.getElementById("typing");
+
+function typeEffect() {
+
+    const currentWord = words[wordIndex];
+
+    if (!isDeleting) {
+
+        typing.textContent = currentWord.substring(0, charIndex++);
+    } else {
+
+        typing.textContent = currentWord.substring(0, charIndex--);
+    }
+
+    let speed = isDeleting ? 70 : 120;
+
+    if (!isDeleting && charIndex === currentWord.length + 1) {
+        speed = 1500;
+        isDeleting = true;
+    }
+
+    if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        wordIndex++;
+
+        if (wordIndex === words.length) {
+            wordIndex = 0;
+        }
+    }
+
+    setTimeout(typeEffect, speed);
+}
+
+typeEffect();
+
+
+// ===============================
+// Active Navigation on Scroll
+// ===============================
+
+const sections = document.querySelectorAll("section");
+const navLinks = document.querySelectorAll(".nav-links a");
+
+window.addEventListener("scroll", () => {
+
+    let current = "";
+
+    sections.forEach(section => {
+
+        const sectionTop = section.offsetTop - 120;
+
+        if (pageYOffset >= sectionTop) {
+            current = section.getAttribute("id");
+        }
+
+    });
+
+    navLinks.forEach(link => {
+
+        link.classList.remove("active");
+
+        if (link.getAttribute("href") === "#" + current) {
+            link.classList.add("active");
+        }
+
+    });
+
+});
+
+
+// ===============================
+// Mobile Nav Toggle
+// ===============================
+
+const navToggle = document.getElementById("navToggle");
+const navLinksList = document.querySelector(".nav-links");
+
+if (navToggle) {
+    navToggle.addEventListener("click", () => {
+        navLinksList.classList.toggle("open");
+    });
+
+    navLinksList.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+            navLinksList.classList.remove("open");
+        });
+    });
+}
+
+
+// ===============================
+// Scroll Reveal
+// ===============================
+
+const revealEls = document.querySelectorAll(".reveal");
+
+const revealObserver = new IntersectionObserver((entries) => {
+
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            revealObserver.unobserve(entry.target);
+        }
+    });
+
+}, { threshold: 0.15 });
+
+revealEls.forEach(el => revealObserver.observe(el));
+
+
+// ===============================
+// Footer Year
+// ===============================
+
+const yearEl = document.getElementById("year");
+if (yearEl) {
+    yearEl.textContent = new Date().getFullYear();
+}
